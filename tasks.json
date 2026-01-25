@@ -1,0 +1,9 @@
+[
+    {
+        "id": "Daily_News",
+        "description": "Fetch global news headlines and send via Telegram",
+        "schedule": "50 16 * * *",
+        "command": "/home/xlx/.pyenv/shims/python3 /home/xlx/project/mcp/tasks/news/daily_news.py",
+        "status": "active"
+    }
+]
