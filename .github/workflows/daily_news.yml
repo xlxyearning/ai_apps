@@ -2,8 +2,8 @@ name: Daily Global News Digest
 
 on:
   schedule:
-    # Runs at 01:00 UTC daily (which is 09:00 Beijing Time / UTC+8)
-    - cron: '0 1 * * *'
+    # Runs at 23:50 UTC daily (which is 07:50 Beijing Time / UTC+8)
+    - cron: '50 23 * * *'
   workflow_dispatch:  # Allows manual triggering from GitHub UI
 
 jobs:
