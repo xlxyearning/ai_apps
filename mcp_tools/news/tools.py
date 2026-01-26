@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent?key={GEMINI_API_KEY}"
+GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key={GEMINI_API_KEY}"
 
 # --- Core Logic (For Scripts) ---
 
@@ -61,7 +61,7 @@ def analyze_news_with_ai(news_items, category: str):
     }
     
     try:
-        response = requests.post(GEMINI_URL, json=payload, timeout=30)
+        response = requests.post(GEMINI_URL, json=payload, timeout=60)
         if response.status_code == 200:
             result = response.json()
             if "candidates" in result and result["candidates"]:
@@ -110,7 +110,7 @@ def analyze_stock_market(news_items):
     }
     
     try:
-        response = requests.post(GEMINI_URL, json=payload, timeout=45) # 增加超时时间
+        response = requests.post(GEMINI_URL, json=payload, timeout=90) # 进一步增加超时时间
         if response.status_code == 200:
             result = response.json()
             if "candidates" in result and result["candidates"]:

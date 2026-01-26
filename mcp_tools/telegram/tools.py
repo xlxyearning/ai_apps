@@ -1,11 +1,45 @@
 import os
 import requests
 import time
+import re
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # --- Core Logic (For Scripts) ---
+
+def clean_html_for_telegram(text: str) -> str:
+    """
+    Telegram only supports a subset of HTML tags: b, strong, i, em, code, s, strike, del, u, pre, a.
+    This function removes or replaces unsupported tags.
+    """
+    # Replace common block elements with newlines or bold
+    text = re.sub(r'<(h1|h2|h3|h4|h5|h6)[^>]*>', '<b>', text, flags=re.IGNORECASE)
+    text = re.sub(r'</(h1|h2|h3|h4|h5|h6)>', '</b>\n', text, flags=re.IGNORECASE)
+    text = re.sub(r'<(p|div|span)[^>]*>', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'</(p|div|span)>', '\n', text, flags=re.IGNORECASE)
+    text = re.sub(r'<br\s*/?>', '\n', text, flags=re.IGNORECASE)
+    text = re.sub(r'<hr\s*/?>', '\n---\n', text, flags=re.IGNORECASE)
+    
+    # List of supported tags
+    supported_tags = ['b', 'strong', 'i', 'em', 'code', 's', 'strike', 'del', 'u', 'pre', 'a']
+    
+    # Remove all other tags but keep content
+    # This regex matches any tag. We use a function to filter out supported tags.
+    def tag_fixer(match):
+        full_tag = match.group(0)
+        tag_name = match.group(1).lower()
+        if tag_name in supported_tags:
+            return full_tag
+        return ""
+
+    # Match opening or closing tags: <tag ...> or </tag>
+    text = re.sub(r'</?([a-zA-Z1-6]+)[^>]*>', tag_fixer, text)
+    
+    # Final cleanup of multiple newlines
+    text = re.sub(r'\n\s*\n', '\n\n', text)
+    
+    return text.strip()
 
 def send_telegram_core(text: str, token: str = None, chat_id: str = None) -> bool:
     """
@@ -18,10 +52,13 @@ def send_telegram_core(text: str, token: str = None, chat_id: str = None) -> boo
         print("Error: TG_TOKEN or CHAT_ID not found.")
         return False
 
+    # Clean the HTML content for Telegram
+    cleaned_text = clean_html_for_telegram(text)
+
     url = f"https://api.telegram.org/bot{token}/sendMessage"
     payload = {
         "chat_id": chat_id,
-        "text": text,
+        "text": cleaned_text,
         "parse_mode": "HTML"
     }
     

@@ -18,13 +18,13 @@ load_dotenv()
 def main():
     # Map display names to English queries for global reach
     topics = {
-        "AI相关": "Artificial Intelligence",
-        "操作系统相关": "Operating Systems Linux Windows macOS",
-        "嵌入式Linux": "Embedded Linux Development",
-        "科技巨头": "Big Tech companies Google Apple Microsoft NVIDIA Meta SpaceX OpenAI Anthropic",
-        "美股市场": "US Stock Market",
-        "A股市场": "China A-Shares market",
-        "国家政策": "China Government Policy"
+        "AI": "Artificial Intelligence",
+        "OS": "Operating Systems Linux Windows macOS",
+        "Embedded Linux": "Embedded Linux Development",
+        "Tech Giants": "Big Tech companies Google Apple Microsoft NVIDIA Meta SpaceX OpenAI Anthropic",
+        "US Stock": "US Stock Market",
+        "A-Shares": "China A-Shares market",
+        "China Policy": "China Government Policy"
     }
     
     current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -40,7 +40,7 @@ def main():
         print(f"Processing {display_name}...")
         
         # Special handling for A-Shares Market Analysis
-        if display_name == "A股市场":
+        if display_name == "A-Shares":
             print(f"Executing deep analysis for {display_name} (25 recent + 5 weekly)...")
             # 1. Fetch 25 items from last 24h
             items_recent = fetch_google_news(query, count=25, days=1)
