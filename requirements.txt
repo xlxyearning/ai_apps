@@ -1,2 +1,5 @@
 requests
 python-dotenv
+feedparser
+yfinance
+akshare
